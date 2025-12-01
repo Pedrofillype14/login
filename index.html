@@ -40,20 +40,16 @@
     <p class="text-center text-danger mt-3" id="erro"></p>
 </div>
 
-<input type="text" id="matricula" placeholder="Matrícula">
-<input type="password" id="senha" placeholder="Senha">
-
-<button onclick="logar()">Entrar</button>
-
-<p id="erro" style="color:red; display:none;"></p>
-
 <script>
 async function logar() {
     const matricula = document.getElementById("matricula").value.trim();
     const senha = document.getElementById("senha").value.trim();
-    const erroMsg = document.getElementById("erro");
+    const erro = document.getElementById("erro");
 
-    erroMsg.style.display = "none";
+    if (!matricula || !senha) {
+        erro.innerText = "❌ Preencha matrícula e senha!";
+        return;
+    }
 
     try {
         const resp = await fetch("https://long-hall-0aaa.pedro-fillype.workers.dev/login", {
@@ -62,22 +58,18 @@ async function logar() {
             body: JSON.stringify({ matricula, senha })
         });
 
-        const data = await resp.json().catch(e => ({
-            ok: false,
-            error: "JSON inválido: " + e
-        }));
+        const data = await resp.json();
 
-        console.log("Resposta do servidor:", data);
-
-        if (!resp.ok || !data.ok) {
-            erroMsg.textContent = data.error || "Erro desconhecido";
-            erroMsg.style.display = "block";
+        if (!data.ok) {
+            erro.innerText = "❌ Matrícula ou senha incorreta!";
             return;
         }
 
-        // Login OK
-        localStorage.setItem("matricula", matricula);
-        window.location.href = "index.html";
+        // Salva matrícula logada
+        localStorage.setItem("usuarioLogado", matricula);
+
+        // Redireciona para página de consulta
+        window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/";
 
     } catch (err) {
         erroMsg.textContent = "ERRO (catch): " + err;
@@ -85,5 +77,6 @@ async function logar() {
     }
 }
 </script>
+
 </body>
 </html>
