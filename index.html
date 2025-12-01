@@ -40,6 +40,7 @@
     <p class="text-center text-danger mt-3" id="erro"></p>
 </div>
 
+
 <script>
 async function logar() {
     const matricula = document.getElementById("matricula").value.trim();
@@ -61,28 +62,23 @@ async function logar() {
         const data = await resp.json();
 
         if (!data.ok) {
-            erro.innerText = "❌ Matrícula ou senha incorreta!";
+            erro.innerText = "❌ " + (data.error || "Matrícula ou senha incorreta!");
             return;
         }
 
         // Salva matrícula logada
-        localStorage.setItem("usuarioLogado", matricula);
-        if (json.ok) {
-            // SALVAR A MATRÍCULA ANTES DE MUDAR DE PÁGINA
-            localStorage.setItem("matricula", matriculaDigitada); // <--- ADICIONE ISSO
-            localStorage.setItem("usuarioLogado", "sim");         // <--- ADICIONE ISSO
-        
-            window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/"; // ou a url do form
-        }
+        localStorage.setItem("matricula", matricula);
+        localStorage.setItem("usuarioLogado", "sim");
+
         // Redireciona para página de consulta
         window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/";
 
     } catch (err) {
-        erroMsg.textContent = "ERRO (catch): " + err;
-        erroMsg.style.display = "block";
+        erro.innerText = "❌ Erro: " + err.message;
     }
 }
 </script>
+
 
 </body>
 </html>
