@@ -67,7 +67,13 @@ async function logar() {
 
         // Salva matrícula logada
         localStorage.setItem("usuarioLogado", matricula);
-
+        if (json.ok) {
+            // SALVAR A MATRÍCULA ANTES DE MUDAR DE PÁGINA
+            localStorage.setItem("matricula", matriculaDigitada); // <--- ADICIONE ISSO
+            localStorage.setItem("usuarioLogado", "sim");         // <--- ADICIONE ISSO
+        
+            window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/"; // ou a url do form
+        }
         // Redireciona para página de consulta
         window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/";
 
